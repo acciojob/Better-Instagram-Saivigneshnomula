@@ -1,15 +1,15 @@
-//your code here
 
 let draggedDiv = null;
 
 for (let i = 1; i <= 6; i++) {
-  let div = document.getElementById("div" + i);
+  let div = document.getElementById("id" + i);
+
   div.draggable = true;
+
   div.addEventListener("dragstart", function () {
     draggedDiv = this;
   });
 
-  // Allow dropping
   div.addEventListener("dragover", function (event) {
     event.preventDefault();
   });
@@ -17,14 +17,14 @@ for (let i = 1; i <= 6; i++) {
   div.addEventListener("drop", function (event) {
     event.preventDefault();
 
-    if (draggedDiv === this) return;
+    if (draggedDiv === this || draggedDiv === null) return;
 
-    let temp = document.createElement("div");
+    // Get both background images
+    let temp = this.style.backgroundImage;
 
-    this.parentNode.insertBefore(temp, this);
-    draggedDiv.parentNode.insertBefore(this, draggedDiv);
-    temp.parentNode.insertBefore(draggedDiv, temp);
+    this.style.backgroundImage = draggedDiv.style.backgroundImage;
+    draggedDiv.style.backgroundImage = temp;
 
-    temp.remove();
+    draggedDiv = null;
   });
 }
