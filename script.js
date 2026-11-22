@@ -15,21 +15,26 @@ for (let i = 1; i <= 6; i++) {
   div.addEventListener("drop", function (event) {
     event.preventDefault();
 
+    // Do nothing if dropped on itself
     if (draggedDiv === null || draggedDiv === this) {
+      draggedDiv = null;
       return;
     }
 
-    let parent = document.getElementById("parent");
+    // Swap the complete content of both divs
+    let temp = draggedDiv.innerHTML;
+    draggedDiv.innerHTML = this.innerHTML;
+    this.innerHTML = temp;
 
-    let draggedIndex = Array.from(parent.children).indexOf(draggedDiv);
-    let targetIndex = Array.from(parent.children).indexOf(this);
+    // Swap background images
+    let tempImage = draggedDiv.style.backgroundImage;
+    draggedDiv.style.backgroundImage = this.style.backgroundImage;
+    this.style.backgroundImage = tempImage;
 
-    if (draggedIndex < targetIndex) {
-      parent.insertBefore(draggedDiv, this.nextSibling);
-    } else {
-      parent.insertBefore(draggedDiv, this);
-    }
+    draggedDiv = null;
+  });
 
+  div.addEventListener("dragend", function () {
     draggedDiv = null;
   });
 }
