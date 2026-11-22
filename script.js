@@ -2,9 +2,7 @@
 let draggedDiv = null;
 
 for (let i = 1; i <= 6; i++) {
-  let div = document.getElementById("id" + i);
-
-  div.draggable = true;
+  let div = document.getElementById("div" + i);
 
   div.addEventListener("dragstart", function () {
     draggedDiv = this;
@@ -17,13 +15,20 @@ for (let i = 1; i <= 6; i++) {
   div.addEventListener("drop", function (event) {
     event.preventDefault();
 
-    if (draggedDiv === this || draggedDiv === null) return;
+    if (draggedDiv === null || draggedDiv === this) {
+      return;
+    }
 
-    // Get both background images
-    let temp = this.style.backgroundImage;
+    let parent = document.getElementById("parent");
 
-    this.style.backgroundImage = draggedDiv.style.backgroundImage;
-    draggedDiv.style.backgroundImage = temp;
+    let draggedIndex = Array.from(parent.children).indexOf(draggedDiv);
+    let targetIndex = Array.from(parent.children).indexOf(this);
+
+    if (draggedIndex < targetIndex) {
+      parent.insertBefore(draggedDiv, this.nextSibling);
+    } else {
+      parent.insertBefore(draggedDiv, this);
+    }
 
     draggedDiv = null;
   });
